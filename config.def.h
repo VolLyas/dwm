@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 6;        /* gaps between windows */
@@ -11,8 +13,8 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "monospace:size=14" };
+static const char dmenufont[]       = "monospace:size=14";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -65,6 +67,11 @@ static const Layout layouts[] = {
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 
+/* mediakeys actions */
+static const char *up_vol[]   = { "wpctl", "set-sink-volume", "@DEFAULT_SINK@", "+5%",   NULL };
+static const char *down_vol[] = { "wpctl", "set-sink-volume", "@DEFAULT_SINK@", "-5%",   NULL };
+static const char *mute_vol[] = { "wpctl", "set-sink-mute",   "@DEFAULT_SINK@", "toggle", NULL };
+
 static const Key keys[] = {
 	/* modifier             key     function        argument */
 	{ MODKEY,               33,     spawn,          {.v = dmenucmd } }, // p
@@ -77,7 +84,7 @@ static const Key keys[] = {
 	{ MODKEY,               43,     setmfact,       {.f = -0.05} }, // h
 	{ MODKEY,               46,     setmfact,       {.f = +0.05} }, // l
 	{ MODKEY|ShiftMask,     36,     zoom,           {0} },          // Return
-	{ Mod4Mask,             23,     view,           {0} },          // Tab
+	{ Mod1Mask,             23,     view,           {0} },          // Tab
 	{ MODKEY|ShiftMask,     54,     killclient,     {0} },          // c
 	{ MODKEY,               28,     setlayout,      {.v = &layouts[0]} }, // t
 	{ MODKEY,               41,     setlayout,      {.v = &layouts[1]} }, // f
@@ -100,6 +107,9 @@ static const Key keys[] = {
 	TAGKEYS(                17,                     7)              // 8
 	TAGKEYS(                18,                     8)              // 9
 	{ MODKEY|ShiftMask,     24,     quit,           {0} },          // q
+	{ 0, XF86XK_AudioMute,          spawn,          {.v = mute_vol } },
+        { 0, XF86XK_AudioLowerVolume,   spawn,          {.v = down_vol } },
+        { 0, XF86XK_AudioRaiseVolume,   spawn,          {.v = up_vol } },								
 };
 
 /* button definitions */
